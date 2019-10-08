@@ -20,17 +20,19 @@ RUN cp -a -L /lib/x86_64-linux-gnu/libm.so.* "$LIBDIR"/ && \
     cp -a -L /lib/x86_64-linux-gnu/libdl.so.* "$LIBDIR"/ && \
     cp -a -L /lib/x86_64-linux-gnu/libpthread.so.* "$LIBDIR"/ && \
     cp -a -L /lib/x86_64-linux-gnu/libc.so.* "$LIBDIR"/ && \
-    cp -a -L /usr/local/bin/redis-server "$LIBDIR"/ && \
-    cp -a -L /usr/local/bin/redis-sentinel "$LIBDIR"/ 
-
+    cp -a -L /usr/local/bin/redis-server "$LIBDIR"
 
 FROM gcr.io/distroless-dev/base-debian10
 
-ENV LIBDIR /data
+ENV LIBDIR /lib/x86_64-linux-gnu/
 
-COPY --from=base /usr/lib/redis/modules /data
+COPY --from=base /usr/lib/redis/modules /lib/x86_64-linux-gnu/
+COPY --from=base /usr/local/bin/redis-server /bin
 
 VOLUME /data
 WORKDIR /data
 
-ENTRYPOINT [ "/data/redis-server" ]
+COPY redis.conf /etc/redis/redis.conf
+COPY redis_override.conf /etc/redis/redis_override.conf
+
+CMD [ "redis-server", "/etc/redis/redis_override.conf", "--loadmodule", "/lib/x86_64-linux-gnu/redisbloom.so" ]
