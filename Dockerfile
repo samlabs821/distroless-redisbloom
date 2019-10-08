@@ -35,7 +35,7 @@ USER nonroot:nonroot
 VOLUME /data
 WORKDIR /data
 
-COPY redis.conf /etc/redis/redis.conf
-COPY redis_override.conf /etc/redis/redis_override.conf
+COPY conf/redis.conf /etc/redis/redis.conf
+COPY conf/redis_override.conf /etc/redis/redis_override.conf
 
 CMD [ "redis-server", "/etc/redis/redis_override.conf", "--loadmodule", "/lib/x86_64-linux-gnu/redisbloom.so" ]

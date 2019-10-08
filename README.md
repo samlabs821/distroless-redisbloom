@@ -1,4 +1,5 @@
 # Redisbloom fork
+Hardened redis
 
 ### 1. Launch RedisBloom with Docker
 
@@ -6,6 +7,12 @@
 docker run -v /data:/data -p 6379:6379 quay.io/samlabs821/distroless-redisbloom
 ```
 
+with custom config:
+```
+docker run -v ./data:/data -v ./conf:/etc/redis/ -p 6379:6379 quay.io/samlabs821/distroless-redisbloom
+```
+
+Important to note - give write permissions to data dir, because redis is running as non root user
 ### 2. Use RedisBloom with `redis-cli`
 ```
 docker exec -it redis-redisbloom bash
