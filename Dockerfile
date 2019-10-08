@@ -21,12 +21,16 @@ RUN cp -a -L /lib/x86_64-linux-gnu/libm.so.* "$LIBDIR"/ && \
     cp -a -L /lib/x86_64-linux-gnu/libpthread.so.* "$LIBDIR"/ && \
     cp -a -L /lib/x86_64-linux-gnu/libc.so.* "$LIBDIR"
 
+
+# runtime image
 FROM gcr.io/distroless-dev/base-debian10
 
 ENV LIBDIR /lib/x86_64-linux-gnu/
 
 COPY --from=base /usr/lib/redis/modules "$LIBDIR"
 COPY --from=base /usr/local/bin/redis-server /bin
+
+USER nonroot:nonroot
 
 VOLUME /data
 WORKDIR /data
